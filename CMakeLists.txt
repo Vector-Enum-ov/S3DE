@@ -6,18 +6,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
 add_executable(S3DE
         src/main.cpp)
 
-target_include_directories(S3DE PUBLIC include/)
-target_link_directories(S3DE PUBLIC lib/)
+add_subdirectory(src/shader)
 
 find_package(OpenGL REQUIRED)
-if (NOT_OPENGL)
-    MESSAGE("OPENGL NOT FOUND")
-    RETURN()
-else()
-    include_directories(${OPENGL_INCLUDE_DIRECTORY})
-endif()
 
 target_link_libraries(S3DE
-        glfw3
-        glew32s
+        ${CMAKE_BINARY_DIR}/src/shader/libSHD.a
+        ${CMAKE_SOURCE_DIR}/lib/libglfw3.a
+        ${CMAKE_SOURCE_DIR}/lib/glew32s.lib
         ${OPENGL_LIBRARY})

@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.24)
 project(SHD)
 
 add_library(SHD STATIC
-        Shader.cpp
-        Shader.h)
+        S3DEshader.cpp
+        S3DEshader.h)
 
 find_package(OpenGL REQUIRED)
 

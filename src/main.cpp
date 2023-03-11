@@ -3,46 +3,33 @@
 //
 
 #include <iostream>
+#include <conio.h>
 
 #define GLEW_STATIC
 #include "./../include/glew.h"
 #include "./../include/glfw3.h"
 
-#include "./shader/Shader.h"
+#include "./../lib/glm/glm.hpp"
+#include "./../lib/glm/gtc/matrix_transform.hpp"
+#include "./../lib/glm/gtc/type_ptr.hpp"
+
+#include "./shader/S3DEshader.h"
+
+using S3DE::S3DEshader;
+
+int initEnvironment();
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void switchFillPolygon();
 
 bool fillPolygon = true;
 
+GLFWwindow* win;
+
 int main(void) {
-    if (!glfwInit()) {
-        std::cout << "GLFW ERROR OCCURRED\n";
-        return -1;
-    }
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    initEnvironment();
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", nullptr, nullptr);
-    if (window == nullptr)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-
-    glfwSetKeyCallback(window, key_callback);
-
-    glewExperimental = GL_TRUE;
-    if (glewInit() != GLEW_OK)
-    {
-        std::cout << "Failed to initialize GLEW" << std::endl;
-        return -1;
-    }
-
-    glViewport(0, 0, 800, 600);
-
-    Shader shd = Shader("./../res/default.vertex", "./../res/default.fragment");
+    S3DEshader shd = S3DEshader("./../res/default.vertex", "./../res/default.fragment");
 
     GLfloat vertices[] = {
             // Positions                       // Colors
@@ -66,7 +53,7 @@ int main(void) {
 
     glBindVertexArray(0);
 
-    while(!glfwWindowShouldClose(window))
+    while(!glfwWindowShouldClose(win))
     {
         glfwPollEvents();
 
@@ -78,13 +65,47 @@ int main(void) {
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(win);
     }
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 
     glfwTerminate();
+    std::cout << "GLFW TERMINATED\n";
+    getch();
+    return 0;
+}
+
+int initEnvironment() {
+    if (!glfwInit()) {
+        std::cout << "GLFW ERROR OCCURRED\n";
+        exit(-1);
+    }
+    std::cout << "GLFW INITIATED\n";
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+    win = glfwCreateWindow(800, 600, "title", nullptr, nullptr);
+
+    if (win == nullptr)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        exit(-2);
+    }
+    std::cout << "WINDOW CREATED\n";
+    glfwMakeContextCurrent(win);
+
+    glewExperimental = GL_TRUE;
+    if (glewInit() != GLEW_OK)
+    {
+        std::cout << "Failed to initialize GLEW" << std::endl;
+        exit(-3);
+    }
+    std::cout << "GLEW INITIATED\n";
+
+    glfwSetKeyCallback(win, key_callback);
+
     return 0;
 }
 

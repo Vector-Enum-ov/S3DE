@@ -11,7 +11,9 @@ add_subdirectory(src/shader)
 find_package(OpenGL REQUIRED)
 
 target_link_libraries(S3DE
-        ${CMAKE_BINARY_DIR}/src/shader/libSHD.a
+        ${CMAKE_BINARY_DIR}/src/shader/libS3DESHD.a)
+
+target_link_libraries(S3DE
         ${CMAKE_SOURCE_DIR}/lib/libglfw3.a
         ${CMAKE_SOURCE_DIR}/lib/glew32s.lib
         ${OPENGL_LIBRARY})

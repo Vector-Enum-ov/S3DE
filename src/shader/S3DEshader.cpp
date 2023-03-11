@@ -14,7 +14,7 @@ namespace S3DE {
         glDeleteShader(vertex);
         glDeleteShader(fragment);
 
-        std::cout << "Shader Program created\n";
+        std::cout << "SHADER PROGRAM CREATED\n";
     }
 
     void S3DEshader::Use() {
